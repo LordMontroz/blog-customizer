@@ -14,10 +14,9 @@ import {
 	ArticleStateType,
 } from 'src/constants/articleProps';
 
-import clsx from 'clsx';
-
 import styles from './ArticleParamsForm.module.scss';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import clsx from 'clsx';
 
 interface ArticleParamsFormProps {
 	setPageData: (articleState: ArticleStateType) => void;
