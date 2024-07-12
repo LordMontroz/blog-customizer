@@ -92,5 +92,12 @@
 			"path": "./node_modules/cz-conventional-changelog"
 		}
 	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "prettier --write . && git add -A .",
+			"pre-push": "npm run other command",
+			"...": "..."
+		}
+	},
 	"homepage": "./"
 }
