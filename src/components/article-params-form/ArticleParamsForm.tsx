@@ -26,13 +26,14 @@ interface ArticleParamsFormProps {
 export const ArticleParamsForm = ({ setPageData }: ArticleParamsFormProps) => {
 	const rootRef = useRef<HTMLDivElement | null>(null);
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
 	const handleToggleSideBarState = (): void => {
-		setIsOpen(!isOpen);
+		setIsMenuOpen(!isMenuOpen);
 	};
 
-	const [articleState, setArticleState] = useState(defaultArticleState);
+	const [articleState, setArticleState] =
+		useState<ArticleStateType>(defaultArticleState);
 
 	const handleChangeDefaultArticleState = (option: OptionType, key: string) => {
 		setArticleState({ ...articleState, [key]: option });
@@ -59,7 +60,7 @@ export const ArticleParamsForm = ({ setPageData }: ArticleParamsFormProps) => {
 	const handleClickOutsideClose = (evt: MouseEvent) => {
 		const targetNode = evt.target as Node;
 		if (
-			isOpen &&
+			isMenuOpen &&
 			rootRef.current &&
 			!rootRef.current.contains(targetNode) &&
 			!isInsideSelect(targetNode)
@@ -69,8 +70,11 @@ export const ArticleParamsForm = ({ setPageData }: ArticleParamsFormProps) => {
 	};
 
 	const handleClickEscClose = (evt: KeyboardEvent) => {
-		if (isOpen && evt.key === 'Escape') {
+		if (isMenuOpen && evt.key === 'Escape') {
 			handleToggleSideBarState();
+		}
+		if (!isMenuOpen) {
+			return;
 		}
 	};
 
@@ -82,18 +86,24 @@ export const ArticleParamsForm = ({ setPageData }: ArticleParamsFormProps) => {
 			document.removeEventListener('click', handleClickOutsideClose);
 			document.removeEventListener('keydown', handleClickEscClose);
 		};
-	}, [isOpen]);
+	}, [isMenuOpen]);
 
 	return (
 		<>
 			<div ref={rootRef}>
-				<ArrowButton isOpen={isOpen} toggleSideBar={handleToggleSideBarState} />
+				<ArrowButton
+					isOpen={isMenuOpen}
+					toggleSideBar={handleToggleSideBarState}
+				/>
 				<aside
 					className={clsx({
 						[styles.container]: true,
-						[styles.container_open]: isOpen,
+						[styles.container_open]: isMenuOpen,
 					})}>
-					<form className={styles.form}>
+					<form
+						className={styles.form}
+						onSubmit={handleChangePageState}
+						onReset={handleResetPageState}>
 						<h2 className={styles.subtitle}>Задайте параметры</h2>
 						<Select
 							title='шрифт'
@@ -142,16 +152,8 @@ export const ArticleParamsForm = ({ setPageData }: ArticleParamsFormProps) => {
 							}}
 						/>
 						<div className={styles.bottomContainer}>
-							<Button
-								onClick={handleResetPageState}
-								title='Сбросить'
-								type='reset'
-							/>
-							<Button
-								onClick={(evt: SyntheticEvent) => handleChangePageState(evt)}
-								title='Применить'
-								type='submit'
-							/>
+							<Button title='Сбросить' type='reset' />
+							<Button title='Применить' type='submit' />
 						</div>
 					</form>
 				</aside>

@@ -1,5 +1,4 @@
 import { CSSProperties, useState } from 'react';
-import clsx from 'clsx';
 
 import { Article } from '../article';
 import { ArticleParamsForm } from '../article-params-form';
@@ -11,8 +10,8 @@ export const App = () => {
 	const [pageData, setPageData] = useState(defaultArticleState);
 
 	return (
-		<div
-			className={clsx(styles.main)}
+		<main
+			className={styles.main}
 			style={
 				{
 					'--font-family': pageData.fontFamilyOption.value,
@@ -24,6 +23,6 @@ export const App = () => {
 			}>
 			<ArticleParamsForm setPageData={setPageData} />
 			<Article />
-		</div>
+		</main>
 	);
 };
